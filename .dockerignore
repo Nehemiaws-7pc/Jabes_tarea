@@ -1,0 +1,15 @@
+*
+!Dockerfile
+!docker/
+!docker/**
+!public/
+!public/**
+!src/
+!src/**
+!sql/
+!sql/**
+!bin/
+!bin/**
+!tests/
+!tests/**
+

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ventas · Banguat</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script type="module" src="assets/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon" aria-hidden="true">V</span><div><strong>VENTAS <span>/ BANGUAT</span></strong><small>Utilitario académico de facturación</small></div></div>
+    <div class="connection"><span id="db-status">Conectando con MySQL…</span><small id="today"></small></div>
+  </header>
+  <main>
+    <nav class="tabs" aria-label="Secciones">
+      <button type="button" data-tab="sale" aria-current="page">Nueva venta</button>
+      <button type="button" data-tab="customers">Clientes</button>
+      <button type="button" data-tab="products">Productos</button>
+      <button type="button" data-tab="history">Ventas guardadas</button>
+    </nav>
+    <div id="message" class="notice" role="status" aria-live="polite" hidden></div>
+    <section id="section-sale">
+      <div class="section-heading"><div><p class="eyebrow">PUNTO DE VENTA</p><h1>Nueva venta</h1><p>Precios en dólares · IVA académico del 12 %</p></div><span class="pill">Comprobante académico</span></div>
+      <fieldset id="sale-fields">
+        <div class="card">
+          <h2><span class="step">01</span> Datos del cliente</h2>
+          <div class="grid customer-grid">
+            <label>Buscar por NIT o nombre<input id="customer-search" type="search" placeholder="Escribe un NIT o nombre"></label>
+            <label>Cliente<select id="customer-select"><option value="">Selecciona un cliente</option></select></label>
+            <button type="button" class="secondary align-end" id="new-customer">+ Nuevo cliente</button>
+          </div>
+          <div class="grid customer-info"><p id="customer-info">Selecciona un cliente para ver sus datos.</p><label>Forma de pago<select id="payment"><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option></select></label></div>
+        </div>
+        <div class="card">
+          <h2><span class="step">02</span> Agregar productos</h2>
+          <label>Buscar producto<input id="product-search" type="search" placeholder="Busca por código o nombre del producto"></label>
+          <div id="product-results" class="product-results" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <h2><span class="step">03</span> Detalle de la venta <span id="item-count" class="count">0 productos</span></h2>
+          <div class="table-wrap"><table><thead><tr><th>Código</th><th>Descripción</th><th>Cantidad</th><th class="numeric">Precio USD</th><th class="numeric">Subtotal USD</th><th>Acción</th></tr></thead><tbody id="cart-body"></tbody></table></div>
+        </div>
+        <div class="checkout-grid">
+          <div class="card rate-card">
+            <p class="eyebrow">BANCO DE GUATEMALA</p><h2>Tipo de cambio USD / GTQ</h2>
+            <div id="rate-value" class="rate-value">Sin tasa seleccionada</div>
+            <p id="rate-status">Consulta el servicio para obtener una referencia real.</p>
+            <p id="rate-date" class="muted"></p>
+            <div class="actions"><button id="fetch-rate" type="button">Consultar Banguat</button><button id="use-saved-rate" type="button" class="secondary" disabled>Usar tasa guardada</button></div>
+          </div>
+          <div class="card totals"><dl><div><dt>Subtotal USD</dt><dd id="subtotal">$ 0.00</dd></div><div><dt>IVA académico (12 %)</dt><dd id="tax">$ 0.00</dd></div><div class="total-usd"><dt>Total USD</dt><dd id="total-usd">$ 0.00</dd></div><div class="total-gtq"><dt>Total GTQ</dt><dd id="total-gtq">Q —</dd></div></dl><p>La tasa y su fecha quedarán registradas en la venta.</p></div>
+        </div>
+      </fieldset>
+      <div class="sale-actions"><button type="button" class="secondary" id="clear-sale">Limpiar venta</button><button type="button" class="save-button" id="save-sale" disabled>Guardar venta y generar comprobante</button></div>
+    </section>
+
+    <section id="section-customers" hidden>
+      <div class="section-heading"><div><p class="eyebrow">CATÁLOGO</p><h1>Clientes</h1><p>Registra los datos que aparecerán en el comprobante.</p></div></div>
+      <form id="customer-form" class="card grid">
+        <label>NIT o identificación<input name="tax_id" required maxlength="30" placeholder="NIT, identificación o CF"></label>
+        <label>Nombre<input name="name" required maxlength="120"></label>
+        <label>Dirección<input name="address" required maxlength="255"></label>
+        <button class="align-end" type="submit">Registrar cliente</button>
+      </form>
+      <div class="card table-wrap"><table><thead><tr><th>NIT / ID</th><th>Nombre</th><th>Dirección</th></tr></thead><tbody id="customers-body"></tbody></table></div>
+    </section>
+
+    <section id="section-products" hidden>
+      <div class="section-heading"><div><p class="eyebrow">CATÁLOGO</p><h1>Productos</h1><p>El precio unitario se registra en USD, antes del IVA académico.</p></div></div>
+      <form id="product-form" class="card grid">
+        <label>Código<input name="code" required maxlength="40"></label>
+        <label>Nombre del producto<input name="name" required maxlength="150"></label>
+        <label>Precio USD<input name="price_usd" type="number" min="0.01" max="999999.99" step="0.01" required></label>
+        <button class="align-end" type="submit">Registrar producto</button>
+      </form>
+      <div class="card table-wrap"><table><thead><tr><th>Código</th><th>Producto</th><th class="numeric">Precio USD</th></tr></thead><tbody id="products-body"></tbody></table></div>
+    </section>
+
+    <section id="section-history" hidden>
+      <div class="section-heading"><div><p class="eyebrow">PERSISTENCIA EN MYSQL</p><h1>Ventas guardadas</h1><p>Últimas 100 ventas. Cada comprobante conserva sus datos originales.</p></div><button type="button" class="secondary" id="refresh-history">Actualizar</button></div>
+      <div class="card table-wrap"><table><thead><tr><th>No.</th><th>Fecha (Guatemala)</th><th>Cliente</th><th>Total USD</th><th>Total GTQ</th><th>Tasa utilizada</th><th>Comprobante</th></tr></thead><tbody id="history-body"></tbody></table></div>
+    </section>
+    <footer>Proyecto académico · Comprobante sin validez fiscal · USD → GTQ con referencia de Banguat</footer>
+  </main>
+
+  <dialog id="receipt-dialog" aria-labelledby="receipt-title">
+    <div id="receipt-content"></div>
+    <div class="actions no-print"><button type="button" id="print-receipt">Imprimir</button><button type="button" class="secondary" id="close-receipt">Cerrar</button></div>
+  </dialog>
+</body>
+</html>
+

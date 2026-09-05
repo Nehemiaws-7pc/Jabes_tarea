@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+.local/
+node_modules/
+.codex/
+.agents/
+CLAUDE.md
+AGENTS.md
+memory/
+*.log
+SUBIR_A_GITHUB.md
+VERIFICACION.md

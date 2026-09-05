@@ -1,0 +1,16 @@
+# SIEMPRE usar con -p ventas-banguat-tests. Nunca usar sobre la instancia de clase.
+services:
+  db:
+    environment:
+      MYSQL_DATABASE: ventas_test
+  init:
+    environment:
+      DB_NAME: ventas_test
+  app:
+    environment:
+      DB_NAME: ventas_test
+    ports: !reset []
+    # Fallo controlado del proveedor, solo en pruebas. TLS sigue activado.
+    extra_hosts:
+      - "www.banguat.gob.gt:127.0.0.1"
+

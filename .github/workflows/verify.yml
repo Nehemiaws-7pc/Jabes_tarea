@@ -1,0 +1,30 @@
+name: Verificar
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagen local
+        run: docker build -t ventas-banguat:local .
+      - name: Revisar sintaxis PHP y JavaScript
+        run: |
+          docker run --rm ventas-banguat:local sh -c 'find src public bin tests -name "*.php" -print0 | xargs -0 -n1 php -l'
+          for file in public/assets/*.js; do node --check "$file"; done
+      - name: Iniciar entorno de pruebas aislado
+        run: docker compose -p ventas-banguat-tests -f compose.yaml -f compose.test.yaml up -d --wait app
+      - name: Probar dinero, ventas, persistencia y errores SOAP
+        run: |
+          docker compose -p ventas-banguat-tests -f compose.yaml -f compose.test.yaml exec -T app php tests/integration.php
+          docker compose -p ventas-banguat-tests -f compose.yaml -f compose.test.yaml exec -T app php tests/http.php
+      - name: Detener entorno de pruebas
+        if: always()
+        run: docker compose -p ventas-banguat-tests -f compose.yaml -f compose.test.yaml down

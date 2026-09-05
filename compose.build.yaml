@@ -1,0 +1,5 @@
+# Solo para desarrollar; los consumidores usan únicamente compose.yaml.
+services:
+  app:
+    build: .
+
