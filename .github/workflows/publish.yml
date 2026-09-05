@@ -46,6 +46,6 @@ jobs:
             ${{ steps.image.outputs.name }}:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.title=Ventas académicas con Banguat
+            org.opencontainers.image.title=Jabes_tarea 
             org.opencontainers.image.version=${{ inputs.version }}
 
