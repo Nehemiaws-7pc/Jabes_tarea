@@ -179,26 +179,6 @@ explícita de tasa guardada. No se desactiva TLS ni se altera el cliente SOAP re
 La prueba SOAP real se hace por separado con `bin/check-banguat.php` en la instancia
 normal. La disponibilidad de un proveedor externo no determina el éxito del CI.
 
-## Publicación por el dueño
-
-1. Crear el repositorio GitHub, revisar los archivos y realizar personalmente
-   el commit y push. `.gitignore` excluye configuración local, secretos y contexto
-   de asistentes; `.dockerignore` permite únicamente el código necesario.
-2. GitHub Actions ejecuta `Verificar` en push y pull request.
-3. Abrir **Actions → Publicar imagen en GHCR (manual) → Run workflow** y elegir
-   una versión como `1.0.0`. Este es el paso que publica: requiere acción del dueño.
-4. El workflow vuelve a ejecutar las pruebas y publica imágenes Linux AMD64/ARM64
-   con etiquetas `1.0.0` y `latest` en `ghcr.io/propietario/repositorio`.
-5. En la configuración del paquete de GitHub, establecer visibilidad pública si
-   se quiere que todos puedan descargar sin autenticación. La visibilidad del
-   repositorio no garantiza por sí sola la del paquete.
-6. Entregar `compose.yaml` y el nombre exacto de la imagen a los integrantes.
-   Preferir una versión concreta para que todos usen la misma entrega.
-
-El workflow utiliza el token efímero de GitHub Actions con permisos
-`contents: read` y `packages: write`; no requiere guardar un token personal en el código.
-No se ejecutan commits, push ni publicación desde esta entrega local.
-
 ## Alcance de ejecución local
 
 Apache solo se publica en 127.0.0.1 y MySQL no publica puertos. Los valores de acceso
