@@ -22,7 +22,7 @@ Jabes pendejo, lee esto para instalar:
 PowerShell:
 
 ```powershell
-$env:APP_IMAGE = "docker pull ghcr.io/nehemiaws-7pc/jabes_tarea:latest"
+$env:APP_IMAGE = "docker pull ghcr.io/nehemiaws-7pc/jabes_tarea:1.0.0"
 docker compose pull
 docker compose up -d --no-build --wait app
 ```
@@ -30,7 +30,7 @@ docker compose up -d --no-build --wait app
 Bash:
 
 ```bash
-export APP_IMAGE=ghcr.io/PROPIETARIO/REPOSITORIO:1.0.0
+export APP_IMAGE=ghcr.io/nehemiaws-7pc/jabes_tarea:1.0.0
 docker compose pull
 docker compose up -d --no-build --wait app
 ```
