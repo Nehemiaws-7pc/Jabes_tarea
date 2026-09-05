@@ -13,7 +13,7 @@ No incluye inventario, autenticación ni procesamiento real de pagos.
 
 ## Ejecutar desde GHCR sin compilar
 
-Una vez que el dueño haya publicado la imagen:
+Jabes pendejo, lee esto para instalar:
 
 1. Instalar/iniciar Docker con contenedores Linux y Docker Compose **2.24.4 o superior**.
 2. Descargar únicamente `compose.yaml` de este repositorio a una carpeta nueva.
@@ -22,7 +22,7 @@ Una vez que el dueño haya publicado la imagen:
 PowerShell:
 
 ```powershell
-$env:APP_IMAGE = "ghcr.io/PROPIETARIO/REPOSITORIO:1.0.0"
+$env:APP_IMAGE = "docker pull ghcr.io/nehemiaws-7pc/jabes_tarea:latest"
 docker compose pull
 docker compose up -d --no-build --wait app
 ```
@@ -35,15 +35,11 @@ docker compose pull
 docker compose up -d --no-build --wait app
 ```
 
-Abrir **http://localhost:8080**. No instalar PHP, MySQL, Composer ni Node.
+Abre **http://localhost:8080**. No instalas PHP, MySQL, Composer ni Node.
 El esquema SQL está incluido en la imagen: no se descarga por separado.
 `db` espera a MySQL; `init` crea las tablas si faltan; luego inicia `app`.
 Una instalación nueva empieza vacía, sin clientes, productos ni tasas falsas.
 
-Sustituir PROPIETARIO/REPOSITORIO por el nombre que muestre GitHub Packages.
-El repositorio y la imagen no están publicados por crear estos archivos.
-Un paquete público permite descargar sin autenticación. Para uno privado,
-cada integrante necesita acceso al paquete y autenticarse con Docker en GHCR.
 
 La variable APP_IMAGE pertenece a la terminal actual: volver a definirla en una
 terminal nueva antes de ejecutar comandos de Compose. Para otro puerto, establecer
