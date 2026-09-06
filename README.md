@@ -30,9 +30,8 @@ docker compose up -d --no-build --wait app
 Bash:
 
 ```bash
-export APP_IMAGE=ghcr.io/nehemiaws-7pc/jabes_tarea:1.0.0
-docker compose pull
-docker compose up -d --no-build --wait app
+sudo env APP_IMAGE=ghcr.io/nehemiaws-7pc/jabes_tarea:1.0.0 docker compose pull
+sudo env APP_IMAGE=ghcr.io/nehemiaws-7pc/jabes_tarea:1.0.0 docker compose up -d --no-build --wait app
 ```
 
 Abre **http://localhost:8080**. No instalas PHP, MySQL, Composer ni Node.
